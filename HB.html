@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快樂 | 星辰祝福</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #0a0e2a, #1a0a3c, #0c1027);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 20px;
+            z-index: 100;
+            text-align: center;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            animation: fadeIn 2s ease-out;
+        }
+        
+        h1 {
+            font-size: 4.2rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff9ed8, #a5d8ff, #ffd166);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(165, 216, 255, 0.5);
+            letter-spacing: 2px;
+            font-weight: normal;
+            padding: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.7rem;
+            color: #c5e8ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(165, 216, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .message-box {
+            background: rgba(10, 8, 36, 0.5);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 60px rgba(157, 78, 221, 0.6);
+            backdrop-filter: blur(15px);
+            max-height: 50vh;
+            overflow-y: auto;
+            position: relative;
+            scroll-behavior: smooth; /* 平滑滚动效果 */
+        }
+        
+        .message {
+            font-size: 1.45rem;
+            line-height: 1.85;
+            text-align: left;
+            padding: 20px;
+            color: #f8f2ff;
+            min-height: 200px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .typing-line {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 1.2s forwards;
+            animation-delay: calc(var(--line-index) * 0.7s);
+            background: linear-gradient(45deg, #ffd1f3, #d1d8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 3px 0;
+        }
+        
+        .heart {
+            color: #ff6b9d;
+            font-size: 2.2rem;
+            margin: 0 8px;
+            display: inline-block;
+            animation: heartbeat 1.6s infinite;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.8);
+        }
+        
+        /* 高级气球设计 */
+        .balloons-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+        }
+        
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 85px;
+            height: 100px;
+            border-radius: 50%;
+            animation: floatUp 25s infinite ease-in;
+            filter: drop-shadow(0 0 18px rgba(255,255,255,0.6));
+            z-index: 20;
+            transform-style: preserve-3d;
+        }
+        
+        .balloon-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .balloon-shine {
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 30%;
+            height: 30%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            filter: blur(5px);
+        }
+        
+        .balloon-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(255,255,255,0.3) 100%);
+            border-radius: 50%;
+        }
+        
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -40px;
+            left: 42px;
+            width: 3px;
+            height: 70px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.2));
+        }
+        
+        .balloon-ribbon {
+            position: absolute;
+            bottom: -95px;
+            left: 38px;
+            width: 12px;
+            height: 60px;
+            background: linear-gradient(to bottom, #ff9ed8, #b36bff);
+            border-radius: 6px;
+            transform: rotate(10deg);
+            animation: ribbonSway 3s infinite ease-in-out alternate;
+        }
+        
+        .balloon:nth-child(1) {
+            left: 10%;
+            background: radial-gradient(circle at 30% 30%, #ff9ed8, #ff6b9d);
+            animation-duration: 28s;
+            animation-delay: 0s;
+        }
+        
+        .balloon:nth-child(2) {
+            left: 20%;
+            background: radial-gradient(circle at 30% 30%, #a5d8ff, #6b8cff);
+            animation-duration: 32s;
+            animation-delay: 3s;
+        }
+        
+        .balloon:nth-child(3) {
+            left: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd166, #ff9e6b);
+            animation-duration: 30s;
+            animation-delay: 7s;
+        }
+        
+        .balloon:nth-child(4) {
+            left: 70%;
+            background: radial-gradient(circle at 30% 30%, #c5ff95, #8bff6b);
+            animation-duration: 27s;
+            animation-delay: 2s;
+        }
+        
+        .balloon:nth-child(5) {
+            left: 85%;
+            background: radial-gradient(circle at 30% 30%, #d9b3ff, #b36bff);
+            animation-duration: 35s;
+            animation-delay: 5s;
+        }
+        
+        /* 星空背景 */
+        .stars-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 6s) infinite ease-in-out;
+        }
+        
+        /* 真实流星效果 - 斜向划过 */
+        .falling-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .falling-star {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,1) 30%, 
+                rgba(255,255,255,0) 100%);
+            transform-origin: left;
+            animation: fallingStar 3s infinite linear;
+            opacity: 0;
+            filter: blur(1px);
+        }
+        
+        .falling-star::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
+        }
+        
+        .galaxy {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(157,78,221,0.3) 0%, rgba(10,8,36,0) 70%);
+            filter: blur(40px);
+            z-index: 1;
+        }
+        
+        .galaxy-1 {
+            top: 10%;
+            left: 10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(107, 182, 255, 0.25) 0%, rgba(10,8,36,0) 70%);
+        }
+        
+        .galaxy-2 {
+            bottom: 15%;
+            right: 15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 182, 193, 0.25) 0%, rgba(10,8,36,0) 70%);
+        }
+        
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #ff6b9d, #b36bff);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 30px rgba(179, 107, 255, 0.7);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            min-width: 160px;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 35px rgba(179, 107, 255, 0.9);
+            background: linear-gradient(45deg, #ff5b8d, #a05bff);
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        .speed-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            padding: 12px 25px;
+            border-radius: 50px;
+            margin-top: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .speed-controls label {
+            font-size: 1.15rem;
+            color: #c5e8ff;
+        }
+        
+        .speed-controls select {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 1.05rem;
+            cursor: pointer;
+        }
+        
+        footer {
+            margin-top: 30px;
+            color: rgba(200, 220, 255, 0.9);
+            font-size: 1.1rem;
+            animation: fadeIn 4s ease-out;
+            text-shadow: 0 0 10px rgba(200, 220, 255, 0.4);
+        }
+        
+        /* 心形粒子 */
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .heart-particle {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            animation: floatHeart 15s infinite linear;
+        }
+        
+        /* 动画定义 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeUp {
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes floatUp {
+            0% { 
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 0.9; }
+            100% { 
+                transform: translateY(-120vh) translateX(40px) rotate(20deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes ribbonSway {
+            0% { transform: rotate(5deg); }
+            100% { transform: rotate(15deg); }
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        /* 真实流星动画 - 斜向划过 */
+        @keyframes fallingStar {
+            0% {
+                transform: translateX(0) translateY(0) rotate(-30deg);
+                opacity: 0;
+                width: 0;
+            }
+            10% {
+                opacity: 1;
+                width: 200px;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(500px) translateY(300px) rotate(-30deg);
+                opacity: 0;
+                width: 0;
+            }
+        }
+        
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 响应式设计 - 手机优化 */
+        @media (max-width: 768px) {
+            h1 { font-size: 3.2rem; }
+            .subtitle { font-size: 1.4rem; }
+            .message { font-size: 1.3rem; }
+            button { padding: 12px 25px; font-size: 1.1rem; min-width: 140px; }
+            .message-box { max-height: 50vh; padding: 20px; }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .message-box { padding: 15px; max-height: 55vh; }
+            .message { font-size: 1.15rem; padding: 10px; }
+            button { font-size: 1rem; padding: 10px 20px; min-width: 130px; }
+            .speed-controls { padding: 10px 20px; }
+            .controls { gap: 10px; }
+            .typing-line { margin-bottom: 18px; }
+        }
+        
+        @media (max-height: 700px) {
+            .message-box { max-height: 45vh; }
+            h1 { font-size: 2.8rem; }
+        }
+        
+        /* 滚动条样式 */
+        .message-box::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .message-box::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .message-box::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #ff6b9d, #b36bff);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .message-box::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #ff5b8d, #a05bff);
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars-bg" id="stars-bg"></div>
+    
+    <!-- 真实流星效果 -->
+    <div class="falling-stars" id="falling-stars"></div>
+    
+    <!-- 心形粒子 -->
+    <div class="hearts-container" id="hearts-container"></div>
+    
+    <!-- 星云效果 -->
+    <div class="galaxy galaxy-1"></div>
+    <div class="galaxy galaxy-2"></div>
+    
+    <!-- 高级气球设计 -->
+    <div class="balloons-container">
+        <div class="balloon">
+            <div class="balloon-inner">
+                <div class="balloon-shine"></div>
+                <div class="balloon-pattern"></div>
+            </div>
+            <div class="balloon-ribbon"></div>
+        </div>
+        <div class="balloon">
+            <div class="balloon-inner">
+                <div class="balloon-shine"></div>
+                <div class="balloon-pattern"></div>
+            </div>
+            <div class="balloon-ribbon"></div>
+        </div>
+        <div class="balloon">
+            <div class="balloon-inner">
+                <div class="balloon-shine"></div>
+                <div class="balloon-pattern"></div>
+            </div>
+            <div class="balloon-ribbon"></div>
+        </div>
+        <div class="balloon">
+            <div class="balloon-inner">
+                <div class="balloon-shine"></div>
+                <div class="balloon-pattern"></div>
+            </div>
+            <div class="balloon-ribbon"></div>
+        </div>
+        <div class="balloon">
+            <div class="balloon-inner">
+                <div class="balloon-shine"></div>
+                <div class="balloon-pattern"></div>
+            </div>
+            <div class="balloon-ribbon"></div>
+        </div>
+    </div>
+    
+    <!-- 主内容 -->
+    <div class="container">
+        <header>
+            <h1>🎂 生日快樂 💖✨🎉</h1>
+            <div class="subtitle">讓流星見證我們永恆的浪漫</div>
+        </header>
+        
+        <div class="message-box">
+            <div class="message" id="message">
+                <!-- 文字将通过JavaScript逐行添加 -->
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="replayBtn"><i class="fas fa-redo"></i> 再看一次</button>
+            <button id="pauseBtn"><i class="fas fa-pause"></i> 暫停</button>
+        </div>
+        
+        <div class="speed-controls">
+            <label for="speedSelect"><i class="fas fa-tachometer-alt"></i> 文字速度：</label>
+            <select id="speedSelect">
+                <option value="slow">慢速</option>
+                <option value="medium" selected>中速</option>
+                <option value="fast">快速</option>
+            </select>
+        </div>
+        
+        <footer>
+            <p>✨ 在浩瀚星辰中，你是我最亮的星 ✨</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 创建背景星星
+            createBackgroundStars();
+            
+            // 创建真实流星
+            createFallingStars();
+            
+            // 创建心形粒子
+            createHeartParticles();
+            
+            // 原始文字内容
+            const messageLines = [
+                "親愛的，生日快樂。",
+                "從我們認識到現在，已經走過了 1234 天。",
+                "這個數字說起來像個有點任性的巧合，",
+                "但妳知道嗎？我從來不覺得我們是偶然。",
+                " ",
+                "這 1234 天裡，我們一起經歷了很多第一次。",
+                "第一次重新熟悉彼此的語氣，",
+                "第一次分享心事到凌晨，",
+                "第一次因為對方笑得太開心，",
+                "第一次吵架後又更加珍惜彼此。",
+                " ",
+                "也許別人眼中，我們的相遇只是普通的「剛好」，",
+                "但對我來說，是命運親手牽線，",
+                "把妳慢慢帶到我生命裡的正中心。",
+                " ",
+                "我喜歡妳不只是因為妳的可愛、聰明、貼心，",
+                "而是妳的出現，讓我的世界有了方向。",
+                " ",
+                "<span class='heart'>❤️</span> 妳知道我最喜歡妳什麼嗎？ <span class='heart'>❤️</span>",
+                "是妳睡前講話越來越小聲但還捨不得掛掉電話的樣子；",
+                "是妳生氣時明明嘴硬卻還是會回訊息；",
+                "是妳每一次靠近我，我都會忍不住想抱緊妳的那種自然。",
+                " ",
+                "我從來沒想過，原來所謂的「心動」，",
+                "不是電影裡的場景，不是煙火，",
+                "而是妳很小的一個動作、一句話，",
+                "甚至只是笑起來的弧度，",
+                "就能讓我在心裡反覆想好幾遍。",
+                " ",
+                "我曾經覺得愛是一件很難的事，",
+                "但遇到妳之後，我發現，原來想對一個人好，是那麼自然的事。",
+                " ",
+                "我想在妳難過的時候給妳最安靜的擁抱，",
+                "想在妳快樂的時候第一個看到妳笑的樣子；",
+                "想在每一個無聊的小日子裡都和妳一起浪費，",
+                "想在漫長又平凡的未來裡，和妳一起數著日子慢慢變老。",
+                " ",
+                "生日是屬於妳的日子，但對我來說，更像是我被這個世界獎勵了一次。",
+                "是宇宙告訴我：「她來了，她是為你存在的。」",
+                " ",
+                "我不敢說我會成為完美的戀人、未來的伴侶，",
+                "但我可以保證的是：不管未來多少個日子，我都會選擇妳。",
+                "選擇在吵架後依然牽妳的手、在困難中撐著我們的小宇宙、",
+                "在每一個平凡的日子裡，繼續讓妳安心、被愛、被照顧。",
+                " ",
+                "我的願望很簡單，只有一個：",
+                "妳也願意讓我陪妳走完所有還沒走過的日子嗎？",
+                "不論是 1234 天，還是 12340 天，我都想一直在妳身邊。",
+                " ",
+                "謝謝妳，讓我在這個世界上，遇見了「原來愛可以這麼真實」的感覺。",
+                "今天是妳的生日，願妳快樂，願妳幸福，願妳永遠不懷疑自己值得被愛。",
+                "因為妳值得，值得我用所有的溫柔與時間，去愛、去守護。",
+                " ",
+                "生日快樂，我的女孩，我的未來。 <span class='heart'>💛</span>"
+            ];
+            
+            const messageElement = document.getElementById('message');
+            const messageBox = document.querySelector('.message-box');
+            const replayBtn = document.getElementById('replayBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const speedSelect = document.getElementById('speedSelect');
+            
+            let currentIndex = 0;
+            let typingInterval;
+            let isPaused = false;
+            
+            // 速度设置
+            const speedSettings = {
+                slow: 5000,
+                medium: 4500,
+                fast: 3500
+            };
+            
+            // 当前速度
+            let currentSpeed = speedSettings.medium;
+            
+            // 创建背景星星
+            function createBackgroundStars() {
+                const starsContainer = document.getElementById('stars-bg');
+                const starCount = 300;
+                
+                for (let i = 0; i < starCount; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('star');
+                    
+                    // 随机大小（1-5px）
+                    const size = Math.random() * 4 + 1;
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    
+                    // 随机位置
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    
+                    // 随机动画时长
+                    const duration = Math.random() * 8 + 4;
+                    star.style.setProperty('--duration', `${duration}s`);
+                    
+                    // 随机闪烁延迟
+                    star.style.animationDelay = `${Math.random() * 8}s`;
+                    
+                    starsContainer.appendChild(star);
+                }
+            }
+            
+            // 创建真实流星 - 斜向划过
+            function createFallingStars() {
+                const container = document.getElementById('falling-stars');
+                const starCount = 15;
+                
+                for (let i = 0; i < starCount; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('falling-star');
+                    
+                    // 随机位置
+                    star.style.top = `${Math.random() * 30}%`;
+                    star.style.left = `${Math.random() * 30}%`;
+                    
+                    // 随机动画时长和延迟
+                    const duration = Math.random() * 4 + 2;
+                    const delay = Math.random() * 15;
+                    star.style.animation = `fallingStar ${duration}s infinite linear ${delay}s`;
+                    
+                    // 随机颜色
+                    const colors = ['#ff9ed8', '#a5d8ff', '#ffd166', '#c5ff95'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    star.style.background = `linear-gradient(to right, 
+                        rgba(255,255,255,0) 0%, 
+                        ${color} 30%, 
+                        rgba(255,255,255,0.9) 70%, 
+                        rgba(255,255,255,0) 100%)`;
+                    
+                    container.appendChild(star);
+                }
+            }
+            
+            // 创建心形粒子
+            function createHeartParticles() {
+                const container = document.getElementById('hearts-container');
+                const heartCount = 15;
+                
+                for (let i = 0; i < heartCount; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart-particle');
+                    heart.innerHTML = '❤️';
+                    
+                    // 随机位置
+                    heart.style.left = `${Math.random() * 100}%`;
+                    
+                    // 随机大小
+                    const size = Math.random() * 1.5 + 0.8;
+                    heart.style.fontSize = `${size}rem`;
+                    
+                    // 随机动画时长和延迟
+                    const duration = Math.random() * 20 + 15;
+                    const delay = Math.random() * 25;
+                    heart.style.animation = `floatHeart ${duration}s infinite linear ${delay}s`;
+                    
+                    container.appendChild(heart);
+                }
+            }
+            
+            // 滚动到消息框底部
+            function scrollToBottom() {
+                messageBox.scrollTop = messageBox.scrollHeight;
+            }
+            
+            // 逐行显示消息 - 确保自动滚动
+            function typeMessage() {
+                messageElement.innerHTML = '';
+                currentIndex = 0;
+                isPaused = false;
+                pauseBtn.innerHTML = '<i class="fas fa-pause"></i> 暫停';
+                
+                // 清除之前的定时器
+                if (typingInterval) {
+                    clearInterval(typingInterval);
+                }
+                
+                // 设置新的定时器
+                typingInterval = setInterval(() => {
+                    if (isPaused) return;
+                    
+                    if (currentIndex < messageLines.length) {
+                        const line = document.createElement('div');
+                        line.className = 'typing-line';
+                        line.innerHTML = messageLines[currentIndex];
+                        line.style.setProperty('--line-index', currentIndex);
+                        messageElement.appendChild(line);
+                        
+                        // 确保滚动到底部
+                        scrollToBottom();
+                        
+                        currentIndex++;
+                    } else {
+                        clearInterval(typingInterval);
+                    }
+                }, currentSpeed);
+            }
+            
+            // 初始化
+            typeMessage();
+            
+            // 重新播放按钮
+            replayBtn.addEventListener('click', typeMessage);
+            
+            // 暂停按钮
+            pauseBtn.addEventListener('click', function() {
+                isPaused = !isPaused;
+                this.innerHTML = isPaused ? '<i class="fas fa-play"></i> 繼續' : '<i class="fas fa-pause"></i> 暫停';
+            });
+            
+            // 速度选择
+            speedSelect.addEventListener('change', function() {
+                currentSpeed = speedSettings[this.value];
+                if (!isPaused) {
+                    clearInterval(typingInterval);
+                    typeMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
